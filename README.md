@@ -1,33 +1,66 @@
 # Mini ATM Booth
 
-This project contains both:
-- `atm.py` — Python command-line version based on the uploaded ATM code, expanded with mini statement and change PIN.
-- `index.html` — browser version designed to look like a physical ATM booth, with a screen, keypad, cash dispenser slot, balance, deposits, withdrawals, account details, mini statement, PIN change, and recent activity.
+A small ATM simulator built with Python and a browser-based interface. It supports basic account actions such as checking the balance, depositing money, withdrawing cash, viewing account details, and checking recent transactions.
 
-## Run the Python version
-Requires Python 3:
+## Features
+
+- PIN-based access
+- Balance inquiry
+- Deposit and withdrawal
+- Validation for invalid amounts and insufficient funds
+- Account details
+- Mini statement and recent transaction history
+- Change PIN
+- ATM-style web interface with a numeric keypad and cash dispenser design
+
+## Account Details
+
+- **Account holder:** Saikat
+- **Account number:** `**** **** 7271`
+- **Account type:** Savings account
+- **Starting balance:** BDT 75,000
+- **Demo PIN:** `1111`
+
+These are sample details for this project only. Do not use real banking credentials.
+
+## Project Files
+
+- `atm.py` — command-line version of the ATM program.
+- `index.html` — browser interface built with HTML, CSS, and JavaScript.
+
+## Run the Python Program
+
+Make sure Python 3 is installed, then run:
+
 ```bash
 python atm.py
 ```
-Demo PIN: `1111`
 
-## Launch the website with GitHub Pages
-GitHub Pages serves static HTML/CSS/JavaScript. It **cannot execute Python directly**. The `index.html` is a browser-side implementation of the same ATM flow; the Python source remains included in `atm.py`.
+Enter the demo PIN `1111` when prompted. Follow the menu to check the balance, deposit or withdraw money, view account details, or exit.
 
-1. Create a GitHub repository (or use an existing one).
-2. Upload `index.html`, `atm.py`, and `README.md` to the repository root.
-3. Go to **Settings → Pages**.
-4. Select **Deploy from a branch**, branch `main`, folder `/ (root)`, then save.
-5. Wait for the deployment to finish and open the URL shown in Settings → Pages.
+## Run the Web Version
 
-## Demo features
-- PIN login (default `1111`) with three failed attempts per page session
-- Balance inquiry
-- Deposit and withdrawal with input validation and insufficient-funds check
-- Account details
-- Mini statement and recent transaction list
-- Change PIN
-- Saves demo balance, PIN, and transaction history in the same browser using `localStorage`
+Open `index.html` in a modern browser. No package installation or build step is required.
 
-## Security warning
-Educational simulation only. No real banking API or account is connected. Client-side PIN checks and localStorage are not secure authentication or secure storage. Do not use real banking credentials or real financial data.
+The web version stores demo account activity in the browser's local storage, so it may remain available when you reopen the page in the same browser. Clearing browser data will remove that saved demo state.
+
+## Deploy on GitHub Pages
+
+GitHub Pages hosts static website files; it does not run Python code on its server. To publish the web interface:
+
+1. Upload `index.html` to the root of your GitHub repository.
+2. Open **Settings → Pages**.
+3. Under **Build and deployment**, select **Deploy from a branch**.
+4. Choose the `main` branch and the `/(root)` folder, then save.
+5. Open the published URL shown on the Pages settings screen.
+
+Keep `atm.py` in the repository if you want others to view or run the Python version separately.
+
+## Note
+
+This project is for learning and demonstration. It is not connected to a bank, and it should not be used for real financial transactions. The PIN check and browser storage are not secure enough for a real banking application.
+
+## Author
+
+**Saikat**  
+GitHub: [saikat-71](https://github.com/saikat-71)

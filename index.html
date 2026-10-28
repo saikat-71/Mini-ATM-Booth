@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#071015">
+<meta name="description" content="Mini ATM Booth — interactive ATM machine simulator for educational use.">
+<title>Mini ATM Booth | ATM Simulator</title>
+<style>
+:root{--bg:#071015;--metal:#1a252b;--metal2:#27353c;--edge:#52646b;--screen:#061c20;--green:#61ffbd;--green2:#17c98b;--text:#eef8f5;--muted:#91a9a8;--red:#ff6d79;--gold:#e7c77b}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 50% 0%,#1b3b3c 0,transparent 42%),linear-gradient(145deg,#060b0e,#101b20 55%,#05090c);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--text);padding:24px 14px;display:flex;align-items:center;justify-content:center}
+.wrap{width:min(100%,1050px)}.top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:0 0 18px}.brand{display:flex;align-items:center;gap:12px}.brand-icon{width:48px;height:48px;border-radius:14px;background:linear-gradient(145deg,#a0ffd6,#23c78e);color:#06251b;display:grid;place-items:center;font-weight:1000;box-shadow:0 0 28px #23c78e33}.brand h1{margin:0;font-size:1.08rem;letter-spacing:.12em}.brand p{margin:4px 0 0;color:var(--muted);font-size:.78rem}.demo{font-size:.7rem;font-weight:900;letter-spacing:.13em;color:var(--green);border:1px solid #61ffbd55;background:#61ffbd0c;border-radius:99px;padding:9px 12px}
+.booth{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(300px,.88fr);gap:18px;align-items:stretch}.machine{border-radius:30px;padding:clamp(15px,3vw,27px);background:linear-gradient(135deg,#2d3b42,#111a1f 45%,#202e34);border:1px solid #66777c88;box-shadow:0 30px 90px #0009,inset 0 1px #ffffff22;position:relative;overflow:hidden}.machine:before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(115deg,transparent 0 32px,#ffffff03 33px 34px);pointer-events:none}.machine-head{position:relative;display:flex;justify-content:space-between;align-items:center;margin-bottom:17px}.machine-head strong{font-size:.77rem;letter-spacing:.19em;color:#c6d6d5}.status{font-size:.7rem;color:var(--green);display:flex;align-items:center;gap:7px}.status:before{content:"";width:7px;height:7px;background:var(--green);border-radius:50%;box-shadow:0 0 12px var(--green)}
+.screen-frame{position:relative;background:linear-gradient(145deg,#0a1114,#29383c);border:1px solid #5a6a6e;border-radius:20px;padding:10px;box-shadow:inset 0 4px 12px #000a,0 7px 0 #11191d}.screen{min-height:340px;border-radius:13px;padding:clamp(17px,3vw,25px);background:radial-gradient(ellipse at top left,#123b35,#061719 62%);border:1px solid #2b6255;box-shadow:inset 0 0 30px #00ff9d0a;color:#e9fff7;overflow:hidden}.screen-brand{display:flex;align-items:center;justify-content:space-between;gap:8px;border-bottom:1px solid #61ffbd25;padding-bottom:13px;margin-bottom:20px}.screen-brand span:first-child{font-size:.7rem;letter-spacing:.14em;color:var(--green);font-weight:850}.screen-brand span:last-child{font-size:.68rem;color:#80aaa1}.screen h2{font-size:clamp(1.3rem,3vw,1.8rem);line-height:1.1;margin:0 0 9px;letter-spacing:-.04em}.screen p{color:#a7c5bb;font-size:.86rem;line-height:1.55;margin:0 0 18px}.big-balance{font-size:clamp(1.8rem,5vw,2.6rem);font-weight:850;letter-spacing:-.05em;margin:10px 0 6px;overflow-wrap:anywhere;color:var(--green)}.mini-label{font-size:.72rem;color:#9db8ae;text-transform:uppercase;letter-spacing:.12em}.screen .notice{font-size:.8rem;margin-top:14px;padding:11px 12px;border-radius:10px;background:#61ffbd0c;border:1px solid #61ffbd2c;color:var(--green)}.screen .notice.error{color:var(--red);background:#ff6d7910;border-color:#ff6d7933}.screen label{display:block;font-size:.77rem;color:#c0d8d0;margin:14px 0 7px}.screen input{width:100%;border:1px solid #47796d;background:#061314;border-radius:10px;padding:13px;color:#effff9;font:inherit;outline:none}.screen input:focus{border-color:var(--green);box-shadow:0 0 0 3px #61ffbd1c}.screen-buttons{display:flex;gap:9px;margin-top:13px;flex-wrap:wrap}.btn{border:1px solid #61ffbd77;background:var(--green);color:#06251a;font-weight:850;border-radius:10px;padding:11px 14px;font-size:.82rem}.btn:hover{filter:brightness(1.08);transform:translateY(-1px)}.btn.alt{background:#102d2a;color:#baffdf;border-color:#61ffbd3d}.screen .detail{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid #61ffbd20;font-size:.8rem}.screen .detail span{color:#92b1a7}.screen .detail strong{text-align:right;overflow-wrap:anywhere}.slot-area{display:flex;align-items:center;gap:13px;margin:22px 4px 0;position:relative}.slot-label{font-size:.68rem;letter-spacing:.1em;color:#a4b5b8}.cash-slot{height:16px;flex:1;border-radius:99px;background:#020607;border:1px solid #4c5c60;box-shadow:inset 0 4px 7px #000;position:relative}.cash-slot:after{content:"";position:absolute;left:9%;right:9%;top:5px;height:2px;background:#354246}.slot-light{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 11px var(--green)}
+.side{display:flex;flex-direction:column;gap:15px}.keypad-card,.history-card{border:1px solid #52646b88;border-radius:24px;background:linear-gradient(140deg,#202d33,#111a1e);padding:19px;box-shadow:0 20px 50px #0005}.side-title{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px}.side-title h3{margin:0;font-size:.9rem;letter-spacing:.04em}.side-title small{color:var(--muted);font-size:.68rem}.keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.key{border:1px solid #52656b;background:linear-gradient(180deg,#34434a,#202b30);color:#f0faf8;border-radius:12px;min-height:49px;font-size:1rem;font-weight:800;box-shadow:0 3px 0 #0a1013}.key:hover{border-color:var(--green);color:var(--green)}.key.action-key{font-size:.7rem;letter-spacing:.04em}.key.clear{color:#ffc2a0}.key.enter{color:#06251b;background:var(--green);border-color:var(--green)}.quick-actions{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-top:14px}.quick{border:1px solid #52656b;background:#152126;color:#dcece8;border-radius:11px;padding:12px 9px;text-align:left;font-size:.78rem;font-weight:750}.quick span{display:block;color:#8ea6a6;font-size:.68rem;margin-top:4px;font-weight:500}.quick:hover{border-color:#61ffbd88;background:#61ffbd0b}.history-card{flex:1}.history-list{display:grid;gap:9px}.tx{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px;border-radius:11px;background:#ffffff05;border:1px solid #ffffff0d}.tx-left{display:flex;gap:9px;align-items:center;min-width:0}.tx-icon{width:32px;height:32px;display:grid;place-items:center;border-radius:10px;background:#61ffbd12;color:var(--green)}.tx-name{font-size:.75rem;font-weight:750}.tx-date{font-size:.65rem;color:#8fa5a5;margin-top:3px}.tx-amount{font-size:.75rem;font-weight:850;white-space:nowrap}.plus{color:var(--green)}.minus{color:#ff9ba3}.empty{color:#91a9a8;font-size:.78rem;padding:12px 0;line-height:1.5}.foot{text-align:center;color:#6f8587;font-size:.72rem;line-height:1.6;margin-top:16px}.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);padding:12px 16px;border-radius:12px;background:#142b2c;border:1px solid #61ffbd55;color:#caffea;box-shadow:0 12px 40px #0008;display:none;z-index:5;font-size:.82rem;max-width:calc(100vw - 24px)}
+@media(max-width:800px){body{padding:16px 10px;align-items:flex-start}.booth{grid-template-columns:1fr}.screen{min-height:310px}.side{display:grid;grid-template-columns:1fr 1fr;align-items:start}.history-card{min-height:100%}}
+@media(max-width:520px){.top{align-items:flex-start}.demo{font-size:.6rem;padding:8px}.brand h1{font-size:.92rem}.brand-icon{width:42px;height:42px}.side{display:flex}.machine{border-radius:22px;padding:13px}.screen-frame{padding:7px}.screen{padding:17px;min-height:300px}.keypad-card,.history-card{border-radius:20px}.key{min-height:47px}.foot{font-size:.68rem}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand"><div class="brand-icon">ATM</div><div><h1>MINI ATM BOOTH</h1><p>Interactive banking machine simulator</p></div></div>
+    <div class="demo">● DEMO MODE</div>
+  </header>
+  <main class="booth">
+    <section class="machine">
+      <div class="machine-head"><strong>SECURE CASH TERMINAL</strong><span class="status">SYSTEM ONLINE</span></div>
+      <div class="screen-frame"><div class="screen" id="screen" aria-live="polite"></div></div>
+      <div class="slot-area"><span class="slot-light"></span><span class="slot-label">CASH DISPENSER</span><div class="cash-slot" aria-label="Simulated cash dispenser"></div></div>
+    </section>
+    <aside class="side">
+      <section class="keypad-card">
+        <div class="side-title"><h3>TERMINAL KEYPAD</h3><small>Use buttons or keyboard</small></div>
+        <div class="keypad" id="keypad">
+          <button class="key" data-key="1">1</button><button class="key" data-key="2">2</button><button class="key" data-key="3">3</button>
+          <button class="key" data-key="4">4</button><button class="key" data-key="5">5</button><button class="key" data-key="6">6</button>
+          <button class="key" data-key="7">7</button><button class="key" data-key="8">8</button><button class="key" data-key="9">9</button>
+          <button class="key clear action-key" data-key="clear">CLEAR</button><button class="key" data-key="0">0</button><button class="key enter action-key" data-key="enter">ENTER</button>
+        </div>
+        <div class="quick-actions">
+          <button class="quick" data-action="balance">◉ Balance<span>Check available funds</span></button>
+          <button class="quick" data-action="deposit">＋ Deposit<span>Add demo funds</span></button>
+          <button class="quick" data-action="withdraw">↗ Withdraw<span>Simulate cash withdrawal</span></button>
+          <button class="quick" data-action="details">▤ Account<span>Account information</span></button>
+          <button class="quick" data-action="statement">▥ Statement<span>Recent transactions</span></button>
+          <button class="quick" data-action="pin">⚙ Change PIN<span>Update demo PIN</span></button>
+        </div>
+      </section>
+      <section class="history-card">
+        <div class="side-title"><h3>RECENT TRANSACTIONS</h3><small id="txCount">0 records</small></div>
+        <div class="history-list" id="history"><div class="empty">No transactions yet. Complete a deposit or withdrawal to see activity here.</div></div>
+      </section>
+    </aside>
+  </main>
+  <footer class="foot">Educational project • Original Python logic adapted into a browser-based simulation<br>Demo PIN: <strong>1111</strong> · No real banking services or money involved</footer>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>
+(() => {
+  const STORAGE_KEY = "mini-atm-booth-demo-v1";
+  const defaultAccount = {name:"pycode.hubb", balance:75000, pin:"1111", type:"Savings account", accountNumber:"•••• •••• 2048"};
+  let account = {...defaultAccount};
+  let transactions = [];
+  let authenticated = false;
+  let pinAttempts = 0;
+  let activeMode = "login";
+  let inputBuffer = "";
+  let toastTimer;
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || "null");
+    if (saved && Number.isSafeInteger(saved.balance) && saved.balance >= 0) {
+      account.balance = saved.balance;
+      if (Array.isArray(saved.transactions)) transactions = saved.transactions.slice(0,10);
+      if (typeof saved.pin === "string" && /^\d{4}$/.test(saved.pin)) account.pin = saved.pin;
+    }
+  } catch (_) {}
+  const screen = document.getElementById("screen");
+  const history = document.getElementById("history");
+  const money = n => new Intl.NumberFormat("en-BD",{style:"currency",currency:"BDT",maximumFractionDigits:0}).format(n);
+  const safeText = value => String(value).replace(/[&<>"']/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
+  function save(){ try { localStorage.setItem(STORAGE_KEY,JSON.stringify({balance:account.balance,pin:account.pin,transactions})); } catch(_){} }
+  function toast(message){const t=document.getElementById("toast");t.textContent=message;t.style.display="block";clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.style.display="none",2600);}
+  function shell(title, body){screen.innerHTML=`<div class="screen-brand"><span>◈ MINI BANKING</span><span>${title}</span></div>${body}`;}
+  function notice(message, error=false){const n=document.getElementById("notice");if(n){n.className="notice"+(error?" error":"");n.textContent=message;}}
+  function renderLogin(message="", error=false){
+    authenticated=false;activeMode="login";inputBuffer="";
+    shell("AUTHENTICATION",`<h2>Welcome to your ATM.</h2><p>Insert your PIN to access your account and banking services.</p><div class="mini-label">4-DIGIT SECURITY PIN</div><label for="pinInput">Enter demo PIN</label><input id="pinInput" type="password" inputmode="numeric" maxlength="4" autocomplete="off" placeholder="••••" aria-label="Enter four digit PIN"><div class="screen-buttons"><button class="btn" id="loginBtn">UNLOCK ACCOUNT →</button><button class="btn alt" id="resetBtn">CLEAR</button></div><div id="notice" class="notice${error?" error":""}" role="status">${safeText(message||"Demo PIN: 1111. This is not real banking authentication.")}</div>`);
+    document.getElementById("loginBtn").onclick=login;
+    document.getElementById("resetBtn").onclick=()=>{document.getElementById("pinInput").value="";document.getElementById("pinInput").focus();};
+    document.getElementById("pinInput").addEventListener("keydown",e=>{if(e.key==="Enter")login();});
+    document.getElementById("pinInput").focus();
+  }
+  function login(){
+    const input=document.getElementById("pinInput");if(!input)return;
+    if(input.value===account.pin){authenticated=true;pinAttempts=0;renderMenu();toast("Account unlocked");}
+    else{pinAttempts++;const left=3-pinAttempts;if(left<=0){renderLogin("Too many incorrect attempts. Access locked for this page session.",true);document.getElementById("loginBtn").disabled=true;document.getElementById("pinInput").disabled=true;document.getElementById("resetBtn").disabled=true;return;}notice(`Incorrect PIN. ${left} attempt${left===1?"":"s"} remaining.`,true);input.value="";input.focus();}
+  }
+  function requireAuth(){if(!authenticated){renderLogin("Please enter your PIN first.",true);return false;}return true;}
+  function renderMenu(){
+    if(!requireAuth())return;activeMode="menu";
+    shell("MAIN MENU",`<h2>Hello, ${safeText(account.name)}.</h2><p>Choose a service from the terminal keypad or the service panel.</p><div class="mini-label">AVAILABLE BALANCE</div><div class="big-balance">${money(account.balance)}</div><div class="notice">✓ Your demo account is active.</div><div class="screen-buttons"><button class="btn" data-screen-action="balance">CHECK BALANCE</button><button class="btn alt" data-screen-action="statement">MINI STATEMENT</button></div>`);
+    screen.querySelectorAll("[data-screen-action]").forEach(b=>b.onclick=()=>action(b.dataset.screenAction));
+  }
+  function showBalance(){if(!requireAuth())return;shell("BALANCE INQUIRY",`<h2>Available balance</h2><p>Your current demo account balance is shown below.</p><div class="mini-label">ACCOUNT BALANCE</div><div class="big-balance">${money(account.balance)}</div><div class="detail"><span>Account type</span><strong>${safeText(account.type)}</strong></div><div class="detail"><span>Account number</span><strong>${safeText(account.accountNumber)}</strong></div><div class="screen-buttons"><button class="btn" id="backBtn">← MAIN MENU</button></div>`);document.getElementById("backBtn").onclick=renderMenu;}
+  function amountForm(kind){if(!requireAuth())return;activeMode=kind;inputBuffer="";const deposit=kind==="deposit";shell(deposit?"CASH DEPOSIT":"CASH WITHDRAWAL",`<h2>${deposit?"Deposit money.":"Withdraw cash."}</h2><p>${deposit?"Enter the amount you want to add to this demo account.":"Enter the amount you want to withdraw. Insufficient funds are rejected."}</p><div class="mini-label">AMOUNT IN BDT (৳)</div><label for="amountInput">Enter whole amount</label><input id="amountInput" type="number" min="1" step="1" inputmode="numeric" placeholder="e.g. 1000"><div class="screen-buttons"><button class="btn" id="submitAmount">${deposit?"DEPOSIT FUNDS":"DISPENSE CASH"}</button><button class="btn alt" id="cancelAmount">CANCEL</button></div><div id="notice" class="notice">Amounts must be positive whole numbers.</div>`);document.getElementById("submitAmount").onclick=()=>processAmount(kind);document.getElementById("cancelAmount").onclick=renderMenu;document.getElementById("amountInput").addEventListener("keydown",e=>{if(e.key==="Enter")processAmount(kind);});document.getElementById("amountInput").focus();}
+  function processAmount(kind){const el=document.getElementById("amountInput");if(!el)return;const raw=el.value.trim(),amount=Number(raw);if(!raw||!Number.isSafeInteger(amount)||amount<=0){notice("Enter a valid whole amount greater than zero.",true);el.focus();return;}if(kind==="withdraw"&&amount>account.balance){notice("Insufficient balance. Please enter a smaller amount.",true);el.focus();return;}if(kind==="deposit"&&account.balance+amount>Number.MAX_SAFE_INTEGER){notice("Amount is too large.",true);return;}account.balance+=kind==="deposit"?amount:-amount;record(kind,amount);save();renderHistory();shell(kind==="deposit"?"DEPOSIT SUCCESS":"WITHDRAWAL SUCCESS",`<h2>${kind==="deposit"?"Deposit complete.":"Please collect your cash."}</h2><p>${kind==="deposit"?"The amount has been added to your demo balance.":"Your simulated cash withdrawal is complete."}</p><div class="mini-label">${kind==="deposit"?"AMOUNT DEPOSITED":"CASH DISPENSED"}</div><div class="big-balance">${money(amount)}</div><div class="detail"><span>New balance</span><strong>${money(account.balance)}</strong></div><div class="notice">✓ Transaction completed successfully.</div><div class="screen-buttons"><button class="btn" id="backBtn">MAIN MENU</button><button class="btn alt" id="anotherBtn">ANOTHER ${kind==="deposit"?"DEPOSIT":"WITHDRAWAL"}</button></div>`);document.getElementById("backBtn").onclick=renderMenu;document.getElementById("anotherBtn").onclick=()=>amountForm(kind);toast(kind==="deposit"?"Deposit accepted":"Cash dispensed (demo)");}
+  function record(kind,amount){transactions.unshift({kind,amount,time:new Date().toLocaleString()});transactions=transactions.slice(0,10);}
+  function details(){if(!requireAuth())return;shell("ACCOUNT INFORMATION",`<h2>Account details</h2><p>Account information for this educational demo.</p><div class="detail"><span>Account name</span><strong>${safeText(account.name)}</strong></div><div class="detail"><span>Account number</span><strong>${safeText(account.accountNumber)}</strong></div><div class="detail"><span>Account type</span><strong>${safeText(account.type)}</strong></div><div class="detail"><span>Account status</span><strong style="color:var(--green)">ACTIVE · DEMO</strong></div><div class="detail"><span>Available balance</span><strong>${money(account.balance)}</strong></div><div class="screen-buttons"><button class="btn" id="backBtn">MAIN MENU</button></div>`);document.getElementById("backBtn").onclick=renderMenu;}
+  function statement(){if(!requireAuth())return;let rows=transactions.slice(0,5).map(t=>`<div class="detail"><span>${safeText(t.time)} · ${t.kind}</span><strong style="color:${t.kind==="Deposit"?"var(--green)":"var(--gold)"}">${t.kind==="Deposit"?"+":"−"}${money(t.amount)}</strong></div>`).join("");shell("MINI STATEMENT",`<h2>Recent activity.</h2><p>Your latest transactions in this browser demo.</p>${rows||'<div class="notice">No transactions recorded yet.</div>'}<div class="screen-buttons"><button class="btn" id="backBtn">MAIN MENU</button></div>`);document.getElementById("backBtn").onclick=renderMenu;}
+  function changePin(){if(!requireAuth())return;activeMode="changePin";shell("PIN MANAGEMENT",`<h2>Change your PIN.</h2><p>Choose a new four-digit demo PIN. It is saved only in this browser on this device.</p><label for="oldPin">Current PIN</label><input id="oldPin" type="password" inputmode="numeric" maxlength="4" placeholder="Current PIN"><label for="newPin">New 4-digit PIN</label><input id="newPin" type="password" inputmode="numeric" maxlength="4" placeholder="New PIN"><label for="confirmPin">Confirm new PIN</label><input id="confirmPin" type="password" inputmode="numeric" maxlength="4" placeholder="Repeat new PIN"><div class="screen-buttons"><button class="btn" id="savePin">UPDATE PIN</button><button class="btn alt" id="cancelPin">CANCEL</button></div><div id="notice" class="notice">Do not use a real banking PIN.</div>`);document.getElementById("savePin").onclick=()=>{const old=document.getElementById("oldPin").value,n=document.getElementById("newPin").value,c=document.getElementById("confirmPin").value;if(old!==account.pin){notice("Current PIN is incorrect.",true);return;}if(!/^\d{4}$/.test(n)){notice("New PIN must contain exactly 4 digits.",true);return;}if(n!==c){notice("PIN confirmation does not match.",true);return;}account.pin=n;save();toast("Demo PIN updated");renderMenu();};document.getElementById("cancelPin").onclick=renderMenu;}
+  function action(which){if(which==="balance")showBalance();else if(which==="deposit"||which==="withdraw")amountForm(which);else if(which==="details")details();else if(which==="statement")statement();else if(which==="pin")changePin();else if(which==="exit"){authenticated=false;renderLogin("You have safely ended your demo session.");toast("Session ended");}}
+  function renderHistory(){document.getElementById("txCount").textContent=`${transactions.length} record${transactions.length===1?"":"s"}`;if(!transactions.length){history.innerHTML='<div class="empty">No transactions yet. Complete a deposit or withdrawal to see activity here.</div>';return;}history.innerHTML=transactions.slice(0,5).map(t=>`<div class="tx"><div class="tx-left"><div class="tx-icon">${t.kind==="Deposit"?"↙":"↗"}</div><div><div class="tx-name">${t.kind==="Deposit"?"Cash deposit":"Cash withdrawal"}</div><div class="tx-date">${safeText(t.time)}</div></div></div><div class="tx-amount ${t.kind==="Deposit"?"plus":"minus"}">${t.kind==="Deposit"?"+":"−"}${money(t.amount)}</div></div>`).join("");}
+  document.querySelectorAll("[data-action]").forEach(b=>b.addEventListener("click",()=>action(b.dataset.action)));
+  document.getElementById("keypad").addEventListener("click",e=>{const b=e.target.closest("[data-key]");if(!b)return;const key=b.dataset.key;const field=screen.querySelector("input:focus")||screen.querySelector("input");if(key==="clear"){if(field){field.value="";field.focus();}return;}if(key==="enter"){if(activeMode==="login")login();else if(activeMode==="deposit"||activeMode==="withdraw")processAmount(activeMode);else{const focused=screen.querySelector("input:focus");if(focused)focused.dispatchEvent(new KeyboardEvent("keydown",{key:"Enter",bubbles:true}));}return;}if(field){if(field.type==="number")field.value=(field.value||"")+key;else if(field.value.length<field.maxLength)field.value+=key;field.focus();}});
+  document.addEventListener("keydown",e=>{if(e.key==="Escape"&&authenticated)renderMenu();});
+  renderHistory();renderLogin();
+})();
+</script>
+</body>
+</html>

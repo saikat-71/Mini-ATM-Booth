@@ -6,7 +6,7 @@ Educational demo only. This is not connected to a real bank.
 from datetime import datetime
 
 account = {
-    "name": "saikat",
+    "name": "Saikat",
     "balance": 75000,
     "pin": "1111",
     "type": "savings account",
